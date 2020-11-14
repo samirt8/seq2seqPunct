@@ -21,10 +21,10 @@ def preprocess_sentence(w):
     w = re.sub(r'[" "]+', " ", w)
 
   # replacing everything with space except (a-z, ".", "?", "!", ",")
-    w_punct = re.sub(r"^[a-z?.!,]\s+", " ", w)
+    w_punct = re.sub(r"[^a-z?.!,]\s+", " ", w)
 
   # replacing everything with space except (a-z)
-    w = re.sub(r"^[a-z]\s+", " ", w)
+    w = re.sub(r"[^a-z]+", " ", w)
 
   #remove multiple spaces
     w = re.sub(' +', ' ', w)
@@ -45,6 +45,7 @@ def create_dataset(path, num_examples):
     lines = io.open(path, encoding='UTF-8').read().strip().split('\n')
 
     word_pairs = [preprocess_sentence(l) for l in lines[:num_examples]]
+    print(word_pairs)
 
     return zip(*word_pairs)
 
