@@ -9,27 +9,17 @@ from data import preprocess_sentence, create_dataset, load_dataset, convert
 from model import Encoder, Decoder, BahdanauAttention
 from evaluate import translate
 
-# Download the file
-path_to_folder = "/home/stanfous/datasets/nmt_with_attention/fra-eng/"
+path_to_file = "/home/stanfous/datasets/text_macron_original.txt"
 
-path_to_zip = tf.keras.utils.get_file(
-    path_to_folder+'fra-eng.zip',
-    origin='http://storage.googleapis.com/download.tensorflow.org/data/fra-eng.zip',
-    extract=True)
+sentence = u"Bonjour, comment tu vas ? Bien et toi ?!"
+print(preprocess_sentence(sentence))
 
-path_to_file = "/home/stanfous/datasets/nmt_with_attention/fra-eng/fra.txt"
-
-en_sentence = u"May I borrow this book?"
-sp_sentence = u"¿Puedo tomar prestado este libro?"
-print(preprocess_sentence(en_sentence))
-print(preprocess_sentence(sp_sentence).encode('utf-8'))
-
-en, sp = create_dataset(path_to_file, None)
-print(en[-1])
-print(sp[-1])
+fr, fr_punct = create_dataset(path_to_file, None)
+print(fr[-1])
+print(fr_punct[-1])
 
 # Try experimenting with the size of that dataset
-num_examples = 2000
+num_examples = 20
 input_tensor, target_tensor, inp_lang, targ_lang = load_dataset(path_to_file, num_examples)
 
 # Calculate max_length of the target tensors
@@ -42,13 +32,12 @@ input_tensor_train, input_tensor_val, target_tensor_train, target_tensor_val = t
 print(len(input_tensor_train), len(target_tensor_train), len(input_tensor_val), len(target_tensor_val))
 
 print ("Input Language; index to word mapping")
-convert(inp_lang, input_tensor_train[700])
-print ()
+convert(inp_lang, input_tensor_train[1])
 print ("Target Language; index to word mapping")
-convert(targ_lang, target_tensor_train[700])
+convert(targ_lang, target_tensor_train[1])
 
 BUFFER_SIZE = len(input_tensor_train)
-BATCH_SIZE = 64
+BATCH_SIZE = 1
 steps_per_epoch = len(input_tensor_train)//BATCH_SIZE
 embedding_dim = 256
 units = 1024
